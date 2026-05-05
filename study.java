@@ -373,7 +373,7 @@ public class Test {
 		distance = new int[V + 1];
 		for (int i = 1; i <= V; i++) {
 			distance[i] = INF;
-			edge[i] = new LinkedList<Node>(); // 각 edge 배열을 LinkedList 로 선언
+			edge[i] = new LinkedList<Node>(); // 각 정점에서의 edge 정보들을 LinkedList 로 정의
 		}
 
 		for (int i = 0; i < E - 1; i++) {
