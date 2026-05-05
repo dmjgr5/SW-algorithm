@@ -223,6 +223,10 @@ class Student implements Comparable<Student>{
 		this.mathScore = mathScore;
 		this.engScore = engScore;
 	}
+
+	// PriorityQueue 에서 쓰이기 위해서는 반드시 compare 로 우선순위 기준을 정해줘야함. 
+	// Integer, String, Double 등: 자바가 이미 비교 방법을 알고 있으므로 그냥 써도 됨.
+    // Student, Item 등 사용자 정의 클래스: 자바가 비교 방법을 모르므로 반드시 알려줘야 함.
 	@Override
 	public int compareTo(Student o) {
 		if (this.mathScore == o.mathScore)
