@@ -211,28 +211,17 @@ public class Test {
 ////////////////    ## PriorityQueue - object & comparable //////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
 package Test;
 
+import java.util.Comparator;
 import java.util.PriorityQueue;
 
-class Student implements Comparable<Student>{
+class Student {
 	int mathScore;
 	int engScore;
 	public Student(int mathScore, int engScore) {
 		this.mathScore = mathScore;
 		this.engScore = engScore;
-	}
-
-	// PriorityQueue 에서 쓰이기 위해서는 반드시 compare 로 우선순위 기준을 정해줘야함. 
-	// Integer, String, Double 등: 자바가 이미 비교 방법을 알고 있으므로 그냥 써도 됨.
-    // Student, Item 등 사용자 정의 클래스: 자바가 비교 방법을 모르므로 반드시 알려줘야 함.
-	@Override
-	public int compareTo(Student o) {
-		if (this.mathScore == o.mathScore)
-			return o.engScore - this.engScore;
-		else
-			return o.mathScore - this.mathScore;
 	}
 }
   
@@ -242,7 +231,19 @@ public class Test {
  
     public static void main(String[] args) {
  
-    	PriorityQueue<Student> pq  = new PriorityQueue<Student>();
+    	// PriorityQueue 에서 쓰이기 위해서는 반드시 compare 로 우선순위 기준을 정해줘야함. 
+    	// Integer, String, Double 등: 자바가 이미 비교 방법을 알고 있으므로 그냥 써도 됨.
+        // Student, Item 등 사용자 정의 클래스: 자바가 비교 방법을 모르므로 반드시 알려줘야 함.
+    	PriorityQueue<Student> pq  = new PriorityQueue<>(new Comparator<Student>() {
+			@Override
+			public int compare(Student o1, Student o2) {
+				if (o2.mathScore == o1.mathScore)
+					return o2.engScore - o1.engScore;
+				else
+					return o2.mathScore - o1.mathScore;
+			}
+    		
+    	});
     	
     	pq.offer(new Student(70,50));
     	pq.offer(new Student(60,50));
@@ -272,4 +273,5 @@ mathScore : engScore
 60 : 50
 20 : 70
 10 : 50
+
 
