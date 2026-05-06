@@ -405,3 +405,149 @@ public class Test {
 3
 7
 INF
+
+
+	
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////    ## MST - 프림 알고리즘 //////////////////////
+// 최소 가중치 합으로 구성된 트리 만들기
+// 특정 시작점부터 시작하여 연결된 노드를 연결하면서 작은 가중치를 가진 애들을 pq 를 이용해 꺼낸다.
+// https://loosie.tistory.com/159
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+package Test;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.PriorityQueue;
+import java.util.StringTokenizer;
+
+// V E
+// s e w
+//		7 9
+//		1 2 3
+//		1 4 5
+//		2 4 1
+//		2 5 2
+//		3 4 3
+//		4 5 6
+//		4 7 4
+//		5 7 5
+//		7 6 3
+public class Test {
+
+	static BufferedReader br;
+	static StringTokenizer st;
+	static int V, E;
+	static boolean[] visited;
+	static List<Node>[] edge;
+	static int total;
+
+	static class Node {
+		public Node(int end, int weight) {
+			this.end = end;
+			this.weight = weight;
+		}
+
+		int end;
+		int weight;
+
+	}
+
+	static void prim(int start) {
+
+		PriorityQueue<Node> pq = new PriorityQueue<Node>(new Comparator<Node>() {
+			@Override
+			public int compare(Node o1, Node o2) {
+				// TODO Auto-generated method stub
+				return o1.weight - o2.weight;
+			}
+		});
+
+		pq.add(new Node(start, 0));
+
+		while (!pq.isEmpty()) {
+
+			Node now = pq.poll();
+			int node = now.end;
+			int weight = now.weight;
+
+			if (visited[node])
+				continue;
+			visited[node] = true;
+
+			total += weight;
+
+			for (Node n : edge[node]) {
+				if (!visited[n.end]) {
+					pq.add(new Node(n.end, n.weight));
+				}
+			}
+
+		}
+
+	}
+
+	public static void main(String[] args) throws Exception {
+
+		br = new BufferedReader(
+				new InputStreamReader(new FileInputStream("/home/dcpark/eclipse-workspace/SWtest/src/Test/prim-test")));
+
+		// 초기화
+		st = new StringTokenizer(br.readLine());
+		V = Integer.parseInt(st.nextToken());
+		E = Integer.parseInt(st.nextToken());
+
+		// 간선 배열 초기화
+		edge = new LinkedList[E + 1];
+		visited = new boolean[V + 1];
+		total = 0;
+
+		// 출발 노드별 간선 배열 초기화
+		for (int i = 1; i <= V; i++) {
+			edge[i] = new LinkedList<Node>();
+		}
+
+		// 간선 입력
+
+		for (int i = 0; i < E; i++) {
+			st = new StringTokenizer(br.readLine());
+			int s = Integer.parseInt(st.nextToken());
+			int e = Integer.parseInt(st.nextToken());
+			int w = Integer.parseInt(st.nextToken());
+
+			edge[s].add(new Node(e, w));
+			edge[e].add(new Node(s, w));
+		}
+
+		// pq 돌리기
+		prim(1);
+
+		System.out.println("minimum cost : " + total);
+
+	}
+}
+
+
+입력
+node edge
+start end weight
+
+7 9
+1 2 3
+1 4 5
+2 4 1
+2 5 2
+3 4 3
+4 5 6
+4 7 4
+5 7 5
+7 6 3
+
+출력
+16
