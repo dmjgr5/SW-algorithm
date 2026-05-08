@@ -551,3 +551,46 @@ start end weight
 
 출력
 16
+
+	
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////    ## 이진탐색 binary search //////////////////////
+// 정렬되어 있는 배열에서 데이터를 검색할 때, 탐색 범위를 절반씩 줄여가며 
+// 값이 있는 위치를 찾아가는 알고리즘이다.
+//출처: https://gangintheremark.tistory.com/174 [갱ㅎr:티스토리]
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+package Test;
+
+public class Test {
+	
+	public static void main(String[] args) throws Exception {
+		
+		int arr[] = {1,2,3,4,5,6,7,8,9,10}; // 정렬되어 있는 배열
+		int answer = 0;
+		int left = 0;
+		int right = arr.length - 1;
+		int mid = 0;
+		int target = 7; // 찾고자 하는 값
+		
+		while(left <= right) {	 // <= 조건 중요!!
+			mid = (left+right)/2;
+			System.out.println(arr[mid]);
+			
+			if(arr[mid] == target) {
+				answer = mid;
+				break;
+			} 
+			
+			if(arr[mid] > target) {  // 찾는값이 mid 보다 작으면 right 값 조정
+				right = mid - 1; //  mid 보다 하나 적은 값으로 변경
+			} else {
+				left = mid + 1; //  mid보다 크면 left 값 조정
+			}
+		}	
+		System.out.println( target + "의 값이 있는 위치는 " + answer + "입니다." );
+		
+	}
+}
+
+
+
