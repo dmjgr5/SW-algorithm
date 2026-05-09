@@ -595,10 +595,9 @@ public class Test {
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////    ## 이진탐색 binary search //////////////////////
-// 정렬되어 있는 배열에서 데이터를 검색할 때, 탐색 범위를 절반씩 줄여가며 
-// 값이 있는 위치를 찾아가는 알고리즘이다.
-//출처: https://gangintheremark.tistory.com/174 [갱ㅎr:티스토리]
+////////////////    ## LCA //////////////////////
+// LCA 해보기
+// https://all-i-want.tistory.com/230
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 package Test;
 
@@ -686,8 +685,7 @@ public class Test {
 	}
 
 	public static void main(String[] args) throws Exception {
-		// LCA 해보기
-		// https://all-i-want.tistory.com/230
+	
 
 		// 입력 받기
 		br = new BufferedReader(new InputStreamReader(
