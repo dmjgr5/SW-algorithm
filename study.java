@@ -594,3 +594,147 @@ public class Test {
 
 
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////    ## 이진탐색 binary search //////////////////////
+// 정렬되어 있는 배열에서 데이터를 검색할 때, 탐색 범위를 절반씩 줄여가며 
+// 값이 있는 위치를 찾아가는 알고리즘이다.
+//출처: https://gangintheremark.tistory.com/174 [갱ㅎr:티스토리]
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+package Test;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+
+public class Test {
+
+//	예제 입력 115
+//	1 2
+//	1 3
+//	2 4
+//	3 7
+//	6 2
+//	3 8
+//	4 9
+//	2 5
+//	5 11
+//	7 13
+//	10 4
+//	11 15
+//	12 5
+//	14 7
+//	6
+//	6 11
+//	10 9
+//	2 6
+//	7 6
+//	8 13
+//	8 15
+//	예제 출력 12
+//	4
+//	2
+//	1
+//	3
+//	1
+
+	static BufferedReader br;
+	static StringTokenizer st;
+	static int N, M;
+
+	static ArrayList<Integer>[] tree; // Integer 노드별 자식 정보들
+
+	// 노드별 정보
+	static boolean[] visited;
+	static int[] parent;
+	static int[] depth;
+
+	static void dfs(int node, int d) {
+
+		if (visited[node])
+			return;
+		visited[node] = true;
+
+		for (int child : tree[node]) {
+
+			if (!visited[child]) {
+				parent[child] = node;
+				depth[child] = d + 1;
+
+				dfs(child, depth[child]);
+			}
+		}
+	}
+
+	static int lca(int a, int b) {
+		if (depth[a] < depth[b]) {
+			int temp = a;
+			a = b;
+			b = temp;
+		}
+		while (depth[a] != depth[b]) {
+			a = parent[a]; // a 가 깊이가 깊은거라 전제하에 같은떄까지 끌어올림
+		}
+
+		while (a != b) {
+			a = parent[a];
+			b = parent[b];
+		}
+
+		return a;
+	}
+
+	public static void main(String[] args) throws Exception {
+		// LCA 해보기
+		// https://all-i-want.tistory.com/230
+
+		// 입력 받기
+		br = new BufferedReader(new InputStreamReader(
+				new FileInputStream("/home/dcpark/Downloads/CodingAlgorithmClass/lca-sample-input")));
+
+		// 노드갯수
+		N = Integer.parseInt(br.readLine());
+
+		tree = new ArrayList[N + 1];
+		visited = new boolean[N + 1];
+		parent = new int[N + 1];
+		depth = new int[N + 1];
+
+		for (int i = 1; i <= N; i++) {
+			tree[i] = new ArrayList<Integer>();
+		}
+
+		// 트리 정보 입력
+		for (int i = 1; i <= N-1; i++) {
+
+			st = new StringTokenizer(br.readLine());
+			int a = Integer.parseInt(st.nextToken());
+			int b = Integer.parseInt(st.nextToken());
+
+			System.out.println(i + "번째");
+			System.out.println(a);
+			System.out.println(b);
+
+			tree[a].add(b);
+			tree[b].add(a);
+		}
+
+		// dfs 구현 -> 부모정보, 깊이 정보 만들기
+		dfs(1, 0); // 노드번호, 해당 노드의 깊이
+
+		System.out.println("===========");
+		// 두 노드 입력 받기
+		M = Integer.parseInt(br.readLine());
+
+		for (int i = 0; i < M; i++) {
+			st = new StringTokenizer(br.readLine());
+			int a = Integer.parseInt(st.nextToken());
+			int b = Integer.parseInt(st.nextToken());
+			// lca 구현
+			System.out.println(a + "와 " + b + "의 LCA 값은 " + lca(a, b));
+
+		}
+
+	}
+}
