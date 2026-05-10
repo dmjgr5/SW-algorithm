@@ -1,6 +1,7 @@
 
-
-## DFS
+ 
+<details>
+<summary>DFS</summary>
 
 ```java
 package Test;
@@ -52,9 +53,17 @@ public class Test {
 여기에서 7 를 방문했습니다. 
 여기에서 4 를 방문했습니다. 
 ```
+</details>
+ 
 
 
-## BFS   
+
+  
+
+ 
+<details>
+<summary>BFS</summary>
+
 
 ```java
 package Test;
@@ -110,9 +119,11 @@ public class Test {
 여기에서 4 를 방문하였습니다.
 여기에서 7 를 방문하였습니다.
 ```
+</details>
 
+<details>
+<summary>Union-Find </summary>
 
-## Union-Find 
 
 ```java
 package Test;
@@ -188,9 +199,10 @@ public class Test {
 8 의 부모노드는 1 입니다.
 1 의 부모노드는 1 입니다.
 ```
-
-
-## Priority Queue - basic
+</details>
+ 
+<details>
+<summary>Priority Queue - basic</summary>
 
 ```java
 package Test;
@@ -248,9 +260,10 @@ PriorityQueue Size : 3 , Poll value: 3
 PriorityQueue Size : 2 , Poll value: 4
 PriorityQueue Size : 1 , Poll value: 5
 ```
-
-	
-## PriorityQueue - object & comparable 
+</details>
+	 
+<details>
+<summary>PriorityQueue - object & comparable </summary>
 
 ```java
 package Test;
@@ -316,9 +329,11 @@ Rank : 3, Math : 80, Eng : 70
 Rank : 4, Math : 50, Eng : 40
 Rank : 5, Math : 30, Eng : 50
 ```
-
-## Dijkstra   
-
+</details>
+ 
+<details>
+<summary>Dijkstra</summary>
+	
 ```java
 package Test;
 
@@ -450,10 +465,11 @@ public class Test {
 7
 INF
 ```
+</details>
 
 
-	
-## MST - 프림 알고리즘
+<details>
+<summary>MST - 프림 알고리즘</summary>
 
 - 최소 가중치 합으로 구성된 트리 만들기
 - 특정 시작점부터 시작하여 연결된 노드를 연결하면서 작은 가중치를 가진 애들을 pq 를 이용해 꺼낸다.
@@ -599,8 +615,11 @@ start end weight
 출력
 16
 ```
+</details>
+	 
+<details>
+<summary>이진탐색 binary search </summary>
 	
-## 이진탐색 binary search 
 - 정렬되어 있는 배열에서 데이터를 검색할 때, 탐색 범위를 절반씩 줄여가며
 - 값이 있는 위치를 찾아가는 알고리즘이다.
 - 출처: https://gangintheremark.tistory.com/174 [갱ㅎr:티스토리]
@@ -639,8 +658,11 @@ public class Test {
 	}
 }
 ```
+</details>
 
-## LCA 
+<details>
+<summary>LCA</summary>
+	
 - https://all-i-want.tistory.com/230
 
 
@@ -783,9 +805,11 @@ public class Test {
 	}
 }
 ```
+</details>
 
-
-## 인덱스 트리 - 구간 합 
+<details>
+<summary>인덱스 트리 - 구간 합 </summary>
+	
 - https://attenti-on.tistory.com/2
 
 ```java
@@ -884,7 +908,7 @@ public class Test {
 
 ```
 
-
+</details>
 
 
 
