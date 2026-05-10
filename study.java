@@ -189,8 +189,6 @@ public class Test {
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////    Priority Queue - basic  /////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 package Test;
 
 import java.util.Collections;
@@ -198,30 +196,53 @@ import java.util.PriorityQueue;
 
 public class Test {
 	
-	public static void main(String[] args) {
-		PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
-		
+	static PriorityQueue<Integer> pq;
+	
+	static void setPq() {
+		pq.offer(3);
 		pq.offer(1);
-		pq.offer(6);
+		pq.offer(5);
+		pq.offer(4);
 		pq.offer(2);
-		pq.offer(8);
-		pq.offer(7);
-		
-		while(!pq.isEmpty()) {
-			System.out.println(pq.poll());
-
-		}
-		
 	}
-	  
+	
+	static void getPqValue() {
+		while(!pq.isEmpty()) {
+			int size = pq.size();
+			int a = pq.poll(); 
+			System.out.println("PriorityQueue Size : " + size + " , Poll value: " + a);
+		}
+	}
+	 
+	public static void main(String[] args) throws Exception {
+		
+		pq = new PriorityQueue<Integer>(Collections.reverseOrder());
+		setPq();
+		getPqValue();
+		
+		System.out.println("===========");
+
+		pq = new PriorityQueue<Integer>();
+		setPq();
+		getPqValue();
+	
+	}
+ 
 }
 
 //result
-8
-7
-6
-2
-1
+PriorityQueue Size : 5 , Poll value: 5
+PriorityQueue Size : 4 , Poll value: 4
+PriorityQueue Size : 3 , Poll value: 3
+PriorityQueue Size : 2 , Poll value: 2
+PriorityQueue Size : 1 , Poll value: 1
+===========
+PriorityQueue Size : 5 , Poll value: 1
+PriorityQueue Size : 4 , Poll value: 2
+PriorityQueue Size : 3 , Poll value: 3
+PriorityQueue Size : 2 , Poll value: 4
+PriorityQueue Size : 1 , Poll value: 5
+
 
 	
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -233,63 +254,64 @@ package Test;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
-class Student {
-	int mathScore;
-	int engScore;
-	public Student(int mathScore, int engScore) {
-		this.mathScore = mathScore;
-		this.engScore = engScore;
-	}
-}
-  
- 
+// 5 명의 수학, 영어 점수를 받아 수학점수가 높은 순서로 정렬하라. 
+// 학생 클래스에 점수를 담아라.
+//수학 점수가 동일하다면 영어점수가 높은 순서로 정렬하자.
 
 public class Test {
- 
-    public static void main(String[] args) {
- 
+	 
+	static PriorityQueue<Student> pq;
+	static int[][] score = {{30,50},{100,40},{80,70},{80,80}, {50,40}};
+	static class Student{
+		public Student(int math, int eng) {
+			this.math = math;
+			this.eng = eng;
+		}
+		int math;
+		int eng;
+		
+		@Override
+		public String toString() { // toString 추가하면 디버그에서 바로 볼수 있다!!
+			return "Student [math=" + math + ", eng=" + eng + "]";
+		}
+	}
+	
+	public static void main(String[] args) throws Exception {
+		
+		// 오름차순 정리
     	// PriorityQueue 에서 쓰이기 위해서는 반드시 compare 로 우선순위 기준을 정해줘야함. 
     	// Integer, String, Double 등: 자바가 이미 비교 방법을 알고 있으므로 그냥 써도 됨.
         // Student, Item 등 사용자 정의 클래스: 자바가 비교 방법을 모르므로 반드시 알려줘야 함.
-    	PriorityQueue<Student> pq  = new PriorityQueue<>(new Comparator<Student>() {
+		pq = new PriorityQueue<Student>(new Comparator<Student>() {
 			@Override
 			public int compare(Student o1, Student o2) {
-				if (o2.mathScore == o1.mathScore)
-					return o2.engScore - o1.engScore;
-				else
-					return o2.mathScore - o1.mathScore;
+				if(o2.math == o1.math) return o2.eng - o1.eng;
+				return o2.math - o1.math;
 			}
-    		
-    	});
-    	
-    	pq.offer(new Student(70,50));
-    	pq.offer(new Student(60,50));
-    	pq.offer(new Student(70,40));
-    	pq.offer(new Student(70,40));
-    	pq.offer(new Student(80,70));
-    	pq.offer(new Student(20,70));
-    	pq.offer(new Student(10,50));
-    	pq.offer(new Student(70,50));
-    	
-    	System.out.println("mathScore" + " : " + "engScore");
-    	while(!pq.isEmpty()) {
-    		Student s = pq.poll();
-    		System.out.println(s.mathScore + " : " + s.engScore);
-    	}
- 
-    }
+		});
+		
+		// Student 객체에 담기
+		for(int i=0; i<score.length; i++) {
+			pq.offer(new Student(score[i][0], score[i][1]));
+		}
+		
+		// 정렬된 순서로 출력하기
+		int order = 0;
+		while(!pq.isEmpty()) {
+			Student s = pq.poll();
+			System.out.println("Rank : " + (++order)+ ", Math : " + s.math + ", Eng : "+ s.eng );
+		}
+	}
 }
 
+
 //result
-mathScore : engScore
-80 : 70
-70 : 50
-70 : 50
-70 : 40
-70 : 40
-60 : 50
-20 : 70
-10 : 50
+Rank : 1, Math : 100, Eng : 40
+Rank : 2, Math : 80, Eng : 80
+Rank : 3, Math : 80, Eng : 70
+Rank : 4, Math : 50, Eng : 40
+Rank : 5, Math : 30, Eng : 50
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////       Dijkstra      /////////////////////////////////////////////////
