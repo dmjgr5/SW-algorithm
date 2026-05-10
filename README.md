@@ -340,130 +340,164 @@ package Test;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
+// 출발지, 목적지, 가중치가 각각 아래와 같은 정보가 있다.
+// 출발지로부터 각 노드의 최단 거리를 구하라.
+// 입력 정보는 아래 파일에 저장되어 있다
+// /home/dcpark/Downloads/CodingAlgorithmClass/dijkstra-input.txt
+//V E 노드갯수, 간선 갯수
+//K 출발지 노드
+//s e w
+// 	5 6 
+// 	1
+// 	5 1 1
+// 	1 2 2
+// 	1 3 3
+// 	2 3 4
+// 	2 4 5
+// 	3 4 6
+
 public class Test {
-
-	static int V, E; // 정점, 간선
-	static int K; // 시작 정점
+	
+	static BufferedReader br;
+	static StringTokenizer st;
+	static int V,E,K;
+	static int INF = Integer.MAX_VALUE;
+	
+	// 다익스트라 기본 자료
+	static int[] distance;
 	static boolean[] visited;
-	static int[] distance; // 최단 거리값 배열
-	static List<Node>[] edge; // 그래프 표현하는 인접 리스트
-	static int INF = 10000000;
-
-	static class Node {
-		int v; // 목적지
-		int w; // 가중치
-
-		public Node(int v, int w) {
-			this.v = v;
-			this.w = w;
+	static List<Edge>[] edgeList;
+	static PriorityQueue<Node> pq;
+	static class Edge {
+		@Override
+		public String toString() {
+			return "Edge [dest=" + dest + ", cost=" + cost + "]";
 		}
+		public Edge(int dest, int cost) {
+			this.dest = dest;
+			this.cost = cost;
+		}
+		int dest;
+		int cost;
 	}
-
-	static void dijkstra(int start) {
-		// pq 정의
-		PriorityQueue<Node> pq = new PriorityQueue<Node>(new Comparator<Node>() {
+	
+	static class Node { // Edge와 사실상 같으나 헷갈리므로 별도 생성(pq 에서 활용)
+		@Override
+		public String toString() {
+			return "Node [node=" + node + ", cost=" + cost + "]";
+		}
+		public Node(int node, int cost) {
+			this.node = node;
+			this.cost = cost;
+		}
+		int node;
+		int cost;
+		
+	}
+	
+	static void dijkstra(int start, int cost) {
+		// pq 초기화(정렬 포함)
+		pq = new PriorityQueue<Node>(new Comparator<Node>() {
 			@Override
 			public int compare(Node o1, Node o2) {
-				// TODO Auto-generated method stub
-				return o1.w - o2.w;
+				return o1.cost - o2.cost;
 			}
+	 
 		});
-
-		// 시작점 정하기
-		pq.offer(new Node(start, 0));
+		// start 부터 시작
+		pq.offer(new Node(start,cost)); // Node 클래스에 넣었다 빼자!!
 		distance[start] = 0;
-
-		// pq 돌리기
-		while (!pq.isEmpty()) {
-			Node now = pq.poll();
-			int now_v = now.v;
-
-			// 방문 안한거만 체크
-			if (!visited[now_v]) {
-				visited[now_v] = true;
-
-				// 목적지별 최단거리 갱신 후 pq 에 넣기
-				for (Node sub : edge[now_v]) {
-					int sub_dest = sub.v;
-					int sub_weight = sub.w;
-
-					if (!visited[sub_dest] && distance[now_v] + sub_weight < distance[sub_dest]) {
-						distance[sub_dest] = distance[now_v] + sub_weight;
-						pq.add(new Node(sub_dest, distance[sub_dest]));
-					}
+		
+		// pq 에서 꺼내고, 간선들 추가
+		while(!pq.isEmpty()) {
+			Node node = pq.poll();
+			int cur = node.node;
+			
+			if(visited[cur]) continue;
+			visited[cur] = true;
+			
+			System.out.println("node 방문 : " + cur);
+			 
+			for(Edge next : edgeList[cur]) {
+				System.out.println(cur + " ==> " + next.dest);
+				int nextNode = next.dest;
+				int nextCost = next.cost;
+				
+				if(!visited[nextNode] && distance[nextNode] > distance[cur] + nextCost) {
+					System.out.println(nextNode + "번 노드 distance 갱신 ");
+					distance[nextNode] = distance[cur] + nextCost;
+					pq.offer(new Node(nextNode, nextCost)); // 갱신한것에 대해서 pq 에 넣어주자!!
 				}
 			}
 		}
 	}
-
+ 
+	
+	
 	public static void main(String[] args) throws Exception {
-
-// V E
-// K
-// s e w
-//    	5 6 
-//    	1
-//    	5 1 1
-//    	1 2 2
-//    	1 3 3
-//    	2 3 4
-//    	2 4 5
-//    	3 4 6
-
-		BufferedReader br = new BufferedReader(new InputStreamReader(
-				new FileInputStream("/home/dcpark/Downloads/CodingAlgorithmClass/dijkstra-input.txt")));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		int V = Integer.parseInt(st.nextToken());
-		int E = Integer.parseInt(st.nextToken());
-
-		int K = Integer.parseInt(br.readLine());
-
-		// 간선 정보 u,v,w
-		edge = new LinkedList[V + 1]; // static List<Node>[] edge; => edge 배열 선언
-		visited = new boolean[V + 1];
-		distance = new int[V + 1];
-		for (int i = 1; i <= V; i++) {
-			distance[i] = INF;
-			edge[i] = new LinkedList<Node>(); // 각 정점에서의 edge 정보들을 LinkedList 로 정의
-		}
-
-		for (int i = 0; i < E - 1; i++) {
+		
+		// 입력 자료
+		br = new BufferedReader(new InputStreamReader(new FileInputStream("/home/dcpark/Downloads/CodingAlgorithmClass/dijkstra-input.txt")));
+		st = new StringTokenizer(br.readLine());
+		V = Integer.parseInt(st.nextToken());
+		E = Integer.parseInt(st.nextToken());
+		K = Integer.parseInt(br.readLine());
+		
+		
+		// 자료 초기화
+		distance = new int[V+1];
+		for(int i = 1; i <= V; i++) distance[i] = INF;
+		visited = new boolean[V+1];
+		edgeList = new ArrayList[V+1];  // new ArrayList !!
+		for(int i = 1; i <= V; i++) edgeList[i] = new ArrayList<Edge>(); // new ArrayList !!
+		
+		// 간선 정보 입력
+		for(int i = 0; i < E; i++) {
 			st = new StringTokenizer(br.readLine());
-			int u = Integer.parseInt(st.nextToken());
-			int v = Integer.parseInt(st.nextToken());
+			int s = Integer.parseInt(st.nextToken());
+			int e = Integer.parseInt(st.nextToken());
 			int w = Integer.parseInt(st.nextToken());
-			edge[u].add(new Node(v, w));
+			edgeList[s].add(new Edge(e,w));
 		}
-
-		dijkstra(K);
-
-		// 출발지로부터 각 정점 최단거리 출력
-		for (int i = 1; i <= V; i++) {
-			if (distance[i] == INF) {
-				System.out.println("INF");
-			} else {
-				System.out.println(distance[i]);
-			}
+		
+		// dijkstra 구현
+		dijkstra(1,0);
+		
+		// 출력
+		for(int i = 1; i<=V; i++) {
+			System.out.println(i + " 의 최단거리 : " + distance[i]);
 		}
-
+		 
 	}
-
 }
 ```
 
 ```sh
 //result 
-0
-2
-3
-7
-INF
+node 방문 : 1
+1 ==> 2
+2번 노드 distance 갱신 
+1 ==> 3
+3번 노드 distance 갱신 
+node 방문 : 2
+2 ==> 3
+2 ==> 4
+4번 노드 distance 갱신 
+node 방문 : 3
+3 ==> 4
+node 방문 : 4
+1 의 최단거리 : 0
+2 의 최단거리 : 2
+3 의 최단거리 : 3
+4 의 최단거리 : 7
+5 의 최단거리 : 2147483647
+
 ```
 </details>
 
