@@ -117,64 +117,73 @@ package Test;
 import java.util.Arrays;
 
 public class Test {
-	 
-	static int[] parent = new int[10+1];
 	
-	static int find(int x) {
-		if(parent[x] == x) return x;
-		
-		return parent[x] = find(parent[x]);
+	// 10 개의 노드가 있다고 하자. 노드쌍 유니온하는것과 파인드하는 메서드를 만들어 보고
+	//상태 변화에 따라 출력해 보자.
+	
+	static int N = 10; // 노드 갯수
+	static int[] parent;
+	
+	static int find(int a) {
+		if(parent[a] == a) {
+			System.out.println(a + " 의 부모노드는 " + parent[a] + " 입니다.");
+			return a;
+		}
+		System.out.println(a + " 의 부모노드는 " + parent[a] + " 입니다.");
+		return parent[a] = find(parent[a]);
 	}
 	
-	static boolean union(int x, int y) {
-		int a = find(x);
-		int b = find(y);
+	static boolean union(int a, int b) {
+		System.out.println("## union " + a + " and " + b);
 		
-		if(a == b) return false;
+		a = parent[a];
+		b = parent[b];
 		
-		if(a <= b) parent[b]=a;
-		else parent[a]=b;
-		return true;
-		 
-	}
-    
-     // parent 출력
-	public static void parentPrint() {
+		if(parent[a] == parent[b]) return false;
+		if(a > b) { // 작은 값을 parent 하기 위해 swap 처리
+			int temp = a;
+			a = b;
+			b = temp;
+		}
+		parent[b] = a;
 		System.out.println(Arrays.toString(parent));
+		return true;
 	}
-
-	public static void main(String[] args) {
-		 for(int i = 1; i <= 10; i++) parent[i] = i;
-		 parentPrint();
-		 
-		 union(1,2);
-		 parentPrint();
-		 
-		 union(2,3);
-		 parentPrint();
-		 
-		 union(4,5);
-		 parentPrint();
-		 
-		 
-		 union(4,3);
-		 parentPrint();
-		 
-		 System.out.println(find(3));
-		 System.out.println(find(5));
-		 
+	 
+	public static void main(String[] args) throws Exception {
+		parent = new int[N+1];
+		for(int i = 1; i <= N; i++) {
+			parent[i] = i; // 자기 자신을 부모로 한다.
+		}
+		
+		union(1,3);
+		union(7,9);
+		union(5,3);
+		find(3);
+		find(9);
+		union(8,1);
+		find(8);
+ 
 		 
 	}
 }
 
 //result
-[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-[0, 1, 1, 3, 4, 5, 6, 7, 8, 9, 10]
-[0, 1, 1, 1, 4, 5, 6, 7, 8, 9, 10]
-[0, 1, 1, 1, 4, 4, 6, 7, 8, 9, 10]
-[0, 1, 1, 1, 1, 4, 6, 7, 8, 9, 10]
-1
-1
+## union 1 and 3
+[0, 1, 2, 1, 4, 5, 6, 7, 8, 9, 10]
+## union 7 and 9
+[0, 1, 2, 1, 4, 5, 6, 7, 8, 7, 10]
+## union 5 and 3
+[0, 1, 2, 1, 4, 1, 6, 7, 8, 7, 10]
+3 의 부모노드는 1 입니다.
+1 의 부모노드는 1 입니다.
+9 의 부모노드는 7 입니다.
+7 의 부모노드는 7 입니다.
+## union 8 and 1
+[0, 1, 2, 1, 4, 1, 6, 7, 1, 7, 10]
+8 의 부모노드는 1 입니다.
+1 의 부모노드는 1 입니다.
+
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
