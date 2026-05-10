@@ -7,45 +7,49 @@ package Test;
 import java.util.Stack;
 
 public class Test {
-	// {{}, {2,3,8}, {1,6,8}, {1,5}, {5,7}, {3,4,7}, {2}, {4,5}, {1,2}};
-
-	static int[][] arr = { {}, { 2, 3, 8 }, { 1, 6, 8 }, { 1, 5 }, { 5, 7 }, { 3, 4, 7 }, { 2 }, { 4, 5 }, { 1, 2 } };
-	static Stack<Integer> stack = new Stack<Integer>();
-	static boolean[] visited = new boolean[9];
-
-	public static void main(String[] args) throws Exception {
- 
-		stack.push(1);
-
-		while (stack.isEmpty() == false) {
-			int s = stack.pop();
-			if (visited[s] == true)
-				continue;
-			visited[s] = true;
-
-			System.out.println("==> " + s);
-
-			for (int next : arr[s]) {
-				if (visited[next] == false) {
-
-					stack.push(next);
-				}
+	
+	// DFS 구현하기
+	static Stack<Integer> stack;
+	static boolean[] visited ;
+	static int[][] arr 
+	= { {}, { 2, 3, 8 }, { 1, 6, 8 }, { 1, 5 }, { 5, 7 }, { 3, 4, 7 }, { 2 }, { 4, 5 }, { 1, 2 } };
+	  
+	static void dfs(int start) {
+		visited = new boolean[9];
+		stack = new Stack<Integer>();
+		stack.push(start);
+		
+		while(!stack.isEmpty()) {
+			int node = stack.pop();
+			if(visited[node]) continue;
+			visited[node] = true;
+			
+			System.out.println("여기에서 " + node + " 를 방문했습니다. ");
+			
+			for(int next : arr[node]) {
+				if(visited[next]) continue;
+				stack.push(next);
 			}
-
 		}
 	}
 
+	public static void main(String[] args) throws Exception {
+		
+		dfs(1);
+	}
+	 
 }
 
 //result
-==> 1
-==> 8
-==> 2
-==> 6
-==> 3
-==> 5
-==> 7
-==> 4
+여기에서 1 를 방문했습니다. 
+여기에서 8 를 방문했습니다. 
+여기에서 2 를 방문했습니다. 
+여기에서 6 를 방문했습니다. 
+여기에서 3 를 방문했습니다. 
+여기에서 5 를 방문했습니다. 
+여기에서 7 를 방문했습니다. 
+여기에서 4 를 방문했습니다. 
+
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
