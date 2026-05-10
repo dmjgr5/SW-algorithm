@@ -59,51 +59,54 @@ package Test;
 
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Stack;
 
 public class Test {
-	// {{}, {2,3,8}, {1,6,8}, {1,5}, {5,7}, {3,4,7}, {2}, {4,5}, {1,2}};
-
-	static int[][] arr = { {}, { 2, 3, 8 }, { 1, 6, 8 }, { 1, 5 }, { 5, 7 }, { 3, 4, 7 }, { 2 }, { 4, 5 }, { 1, 2 } };
-	static Stack<Integer> stack = new Stack<Integer>();
-	//Stack과 다르게 전용 구현체가 존재하지 않는다. LinkedList를 구현체로 사용할 수 있다.
-	static Queue<Integer> queue = new LinkedList<Integer>();
-	static boolean[] visited = new boolean[9];
-
-	public static void main(String[] args) throws Exception {
- 
-		queue.offer(6);
-
-		while (queue.isEmpty() == false) {
-			int s = queue.poll();
-			if (visited[s] == true)
-				continue;
-			visited[s] = true;
-
-			System.out.println("==> " + s);
-
-			for (int next : arr[s]) {
-				if (visited[next] == false) {
-
-					queue.offer(next);
-					 
-				}
+	
+	// BFS 구현하기
+	static Queue<Integer> queue;
+	static boolean[] visited ;
+	static int[][] arr 
+	= { {}, { 2, 3, 8 }, { 1, 6, 8 }, { 1, 5 }, { 5, 7 }, { 3, 4, 7 }, { 2 }, { 4, 5 }, { 1, 2 } };
+	  
+	static void bfs(int start) {
+		visited = new boolean[9];
+		queue = new LinkedList<Integer>(); //Stack과 다르게 전용 구현체가 존재하지 않는다. LinkedList를 구현체로 사용할 수 있다.
+		
+		queue.offer(start);
+		while(!queue.isEmpty()) {
+			int node = queue.poll();
+			
+			if(visited[node]) continue;
+			visited[node] = true;
+			
+			System.out.println("여기에서 " + node + " 를 방문하였습니다.");
+			
+			for(int next : arr[node]) {
+				if(visited[next]) continue;
+				queue.offer(next);
 			}
-
+			
 		}
+ 
 	}
 
+	public static void main(String[] args) throws Exception {
+		
+		bfs(1);
+		 
+	}
 }
 
 //result
-==> 6
-==> 2
-==> 1
-==> 8
-==> 3
-==> 5
-==> 4
-==> 7
+여기에서 1 를 방문하였습니다.
+여기에서 2 를 방문하였습니다.
+여기에서 3 를 방문하였습니다.
+여기에서 8 를 방문하였습니다.
+여기에서 6 를 방문하였습니다.
+여기에서 5 를 방문하였습니다.
+여기에서 4 를 방문하였습니다.
+여기에서 7 를 방문하였습니다.
+
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
