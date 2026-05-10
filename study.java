@@ -736,3 +736,102 @@ public class Test {
 
 	}
 }
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////  인덱스 트리 - 구간 합 // //////////////////////
+// https://attenti-on.tistory.com/2
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+package Test;
+
+import java.util.Arrays;
+
+public class Test {
+	
+	static int N = 7;
+	static int[] numbers = {1,2,3,4,5,6,7};
+	static int[] indexTree;
+	static int leafSize;
+	static int treeSize;
+	static int baseSize;
+	
+	
+	static void makeIndexTree(){
+		// 리프 사이즈 구하기
+		leafSize = 1;
+		while(leafSize < N) {
+			leafSize = leafSize << 1;  ////////// 중요!!!!!!!!!
+		}
+		treeSize = leafSize * 2;       ///////// 중요!!!!!!!!!
+		indexTree = new int[treeSize];
+		baseSize = leafSize - 1;
+		printIndexTree();
+	}
+	
+	static void getSum(int start, int end) {
+		printIndexTree();
+		System.out.println(start + "와 " + end + " 사이의 부분합은 ");		
+		start = baseSize + start;
+		end = baseSize + end;
+
+		int result = 0;
+		while(start <= end) {
+			if(start%2 == 1) result += indexTree[start]; ///////// 중요!!!!!!!!!
+			if(end%2 == 0) result += indexTree[end];    ///////// 중요!!!!!!!!!
+			
+			start = (start+1) / 2;
+			end = (end-1) / 2;
+		}
+		System.out.print(  result + " 입니다.");
+	}
+ 
+	static void update(int idx, int val) {
+		idx = baseSize + idx; 
+		indexTree[idx] = val;
+		while(idx > 1) {  ///////// 중요!!!!!!!!!
+			idx = idx/2;
+			indexTree[idx] = indexTree[idx*2] + indexTree[(idx*2) +1];
+		}
+		printIndexTree();
+	}
+	
+	static void printIndexTree() {
+		int[] iTree = new int[indexTree.length];
+		for(int i = 0; i < indexTree.length; i++) iTree[i]=i;
+		System.out.println("------------------------------------");
+		System.out.println(Arrays.toString(iTree));
+		System.out.println(Arrays.toString(indexTree));
+	}
+ 
+
+	public static void main(String[] args) throws Exception {
+		
+		// 인덱스 트리 생성
+		makeIndexTree(); 
+		
+		// 트리에 값 채우기
+		for(int i = 1; i <= numbers.length; i++) {
+			// 단말 노드 채우기
+			System.out.println(baseSize+i + "노드 업데이트!!");
+			indexTree[baseSize+i] = numbers[i-1];
+			
+			
+			// 상위 노드 구간합 구하기
+			int current = baseSize+i;
+			current = current/2;
+			while(current > 0) {
+				indexTree[current] = indexTree[current*2] + indexTree[current*2 + 1];
+				current = current/2;
+			}
+		} 
+		getSum(2,4);
+		
+		update(2,5);
+		
+		getSum(2,4);
+
+		
+	}
+	 
+}
