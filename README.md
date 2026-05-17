@@ -502,6 +502,147 @@ node 방문 : 4
 </details>
 
 
+
+<details>
+<summary>MST - 크루스칼 알고리즘</summary>
+
+- 최소 가중치 합으로 구성된 트리 만들기
+- MST - 크루스칼 알고리즘: 모든 간선을 pq 에 넣고, 작은 가중치부터 꺼내어 union 아니면 추가, union 이면 스킵
+- [https://loosie.tistory.com/159](https://sjh9708.tistory.com/244#google_vignette)
+
+```java
+package Test;
+ 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.util.Comparator;
+import java.util.PriorityQueue;
+import java.util.StringTokenizer;
+
+// V E
+// s e w
+//		7 9
+//		1 2 3
+//		1 4 5
+//		2 4 1
+//		2 5 2
+//		3 4 3
+//		4 5 6
+//		4 7 4
+//		5 7 5
+//		7 6 3
+public class Test {
+
+	static BufferedReader br;
+	static StringTokenizer st;
+	static int V, E;
+	static PriorityQueue<Edge> pq;
+	static int total;
+	static int[] parent;
+    static int MAX = Integer.MAX_VALUE;
+    
+	static class Edge {
+ 
+		public Edge(int start, int end, int weight) {
+			this.start = start;
+			this.end = end;
+			this.weight = weight;
+		}
+		int start;
+		int end;
+		int weight;
+
+	}
+	
+	static int find(int a) {
+		if(parent[a] == a) return a;
+		return parent[a] = find(parent[a]);
+	}
+
+	static boolean union(int a, int b) {
+		a = find(a);
+		b = find(b);
+		
+		if(a == b) return false;
+		if(a > b) {
+			int temp = a;
+			a = b;
+			b = temp;
+		}
+		parent[b] = a;
+	    return true;
+	}
+
+	static void kruskal() {
+		
+		while(!pq.isEmpty()) {
+			Edge cur = pq.poll();
+			int s = cur.start;
+			int e = cur.end;
+			int w = cur.weight;
+			
+			if(find(s) == find(e)) continue;
+			
+			total += w;
+			union(s,e);
+		}
+	}
+
+	public static void main(String[] args) throws Exception {
+
+		br = new BufferedReader(
+				new InputStreamReader(new FileInputStream("/home/dcpark/eclipse-workspace/SWtest/src/Test/prim-test")));
+
+		// 초기화
+		st = new StringTokenizer(br.readLine());
+		V = Integer.parseInt(st.nextToken());
+		E = Integer.parseInt(st.nextToken());
+
+		// 간선 배열 초기화
+		total = 0;
+		parent = new int[V+1];
+		for (int i = 1; i <= V; i++) {
+			parent[i] = i;
+		}
+		
+		pq = new PriorityQueue<Edge>(new Comparator<Edge>() {
+			@Override
+			public int compare(Edge o1, Edge o2) {
+				// TODO Auto-generated method stub
+				return o1.weight - o2.weight;
+			}
+		});
+
+
+		// 간선 입력
+
+		for (int i = 0; i < E; i++) {
+			st = new StringTokenizer(br.readLine());
+			int s = Integer.parseInt(st.nextToken());
+			int e = Integer.parseInt(st.nextToken());
+			int w = Integer.parseInt(st.nextToken());
+
+			pq.offer(new Edge(s,e,w)); 
+		}
+
+		// pq 돌리기
+		kruskal();
+
+		System.out.println("minimum cost : " + total);
+
+	}
+}
+```
+```sh
+minimum cost : 16
+```
+
+
+</details>
+
+
+
 <details>
 <summary>MST - 프림 알고리즘</summary>
 
