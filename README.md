@@ -1,4 +1,17 @@
 
+
+## 코딩테스트 자주 나오는 자료구조 총정리 (Java 기준) <i>[참고자료](https://opentutorials.org/module/782/6083)</i>
+
+| 자료구조	|  주요 특징	| 대표 사용처| 
+| --- |---  |---  | 
+| ArrayList	| 순차 저장, 인덱스 접근	| 투 포인터, 누적합| 
+| Stack	| LIFO 구조	| 괄호, 백트래킹| 
+| Queue	| FIFO 구조 | 	BFS, 시뮬레이션| 
+| PriorityQueue	| 우선순위 정렬 | 	최소 비용, 힙| 
+| Deque	| 양방향 삽입/제거	| 슬라이딩 윈도우| 
+| HashMap / Set	| 빠른 검색/저장	| 중복 체크, 매핑| 
+ 
+
  
 <details>
 <summary>DFS</summary>
